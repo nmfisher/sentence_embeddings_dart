@@ -1,0 +1,2 @@
+example/minilm.quant.onnx filter=lfs diff=lfs merge=lfs -text
+example/minilm.quant.ort filter=lfs diff=lfs merge=lfs -text

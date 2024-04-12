@@ -1,0 +1,29 @@
+name: sentence_embeddings_dart
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.5.0-47.0.dev
+
+# Add regular dependencies here.
+dependencies:
+  ffi:
+  ffigen:
+  sentencepiece_dart_bindings:
+    path: ../sentencepiece_dart_bindings
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.24.0
+
+ffigen:
+  output: 'lib/src/sentence_embeddings_dart.g.dart'
+  headers:
+    entry-points:
+      - 'native/include/SentenceEmbeddingsCApi.h'
+    include-directives:
+      - 'native/include/SentenceEmbeddingsCApi.h'
+  ffi-native:
+    assetId: package:sentence_embeddings_dart/sentence_embeddings_dart.dart
+  ignore-source-errors: true
