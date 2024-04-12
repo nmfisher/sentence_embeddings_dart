@@ -48,7 +48,6 @@ class SentenceEmbeddings {
     if (eos != null) {
       tokens = tokens + [eos!];
     }
-    print("Tokens $tokens");
 
     final ptr = calloc<Int64>(tokens.length);
     for (int i = 0; i < tokens.length; i++) {
