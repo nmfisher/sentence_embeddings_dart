@@ -12,9 +12,6 @@ void main() {
   var embeddingsModelData = embeddingsModel.readAsBytesSync();
   var sentenceEmbedddings =
       SentenceEmbeddings(tokenizerModelData, embeddingsModelData);
-  for (int i = 0; i < 100; i++) {
-    print(i);
-    var embeddings = sentenceEmbedddings.embed("Hello world");
-  }
-  // print(embeddings);
+  var embeddings = sentenceEmbedddings.embed("Hello World");
+  for (int i = 0; i < 5; i++) print(embeddings[i]);
 }
