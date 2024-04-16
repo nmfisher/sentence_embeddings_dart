@@ -12,6 +12,7 @@ class SentenceEmbeddings {
   late final SentencePieceTokenizer tokenizer;
 
   late final int _embeddingDim;
+  int get embeddingDim => _embeddingDim;
 
   SentenceEmbeddings(
     Uint8List tokenizerModel,
@@ -36,9 +37,11 @@ class SentenceEmbeddings {
     sentence_embeddings_unload_model();
   }
 
-  List<double> embed(String sentence) {
-    print(tokenizer.tokenize("<s>"));
+  (Pointer<Float>, List<int>) embedAsPointer(String sentence) {
+    final out = calloc<Float>(_embeddingDim);
+
     var tokens = tokenizer.tokenize(sentence);
+
     if (increment > 0) {
       tokens = tokens.map((t) => t + increment).toList();
     }
@@ -54,12 +57,19 @@ class SentenceEmbeddings {
       ptr[i] = tokens[i];
     }
 
-    final out = calloc<Float>(_embeddingDim);
     sentence_embeddings_embed(ptr, tokens.length, out);
     calloc.free(ptr);
+    return (out, tokens);
+  }
 
+  List<double> embed(String sentence) {
+    final (out, tokens) = embedAsPointer(sentence);
     var embeddings = List<double>.from(out.asTypedList(_embeddingDim));
-    calloc.free(out);
     return embeddings;
+    calloc.free(out);
+  }
+
+  void free(Pointer<Float> ptr) {
+    calloc.free(ptr);
   }
 }

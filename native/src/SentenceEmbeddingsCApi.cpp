@@ -25,6 +25,8 @@
 #include <iostream>
 #include <cmath>
 
+#include "Log.h"
+
 #define EXPORT __attribute__((visibility("default"))) __attribute__((used))
 
 using namespace std;
@@ -62,11 +64,11 @@ EXPORT bool sentence_embeddings_load_model(void* const data, size_t length)
         (size_t)length,
         opts
     };
-    std::cout << "Getting output shapes" << std::endl; 
-    auto oshapes = _session->GetOutputShapes();
-    std::cout << "got shapes" << std::endl; 
 
-    _embeddingDim = oshapes[1][1];
+    auto onames = _session->GetOutputNames();
+
+    auto oshapes = _session->GetOutputShapes();
+    _embeddingDim = oshapes[0][1];
     return true;
 }
 
@@ -97,7 +99,7 @@ EXPORT void sentence_embeddings_embed(int64_t* tokenIds, int32_t length, float* 
 
     auto output = _session->Run(inames, input_tensors, onames);
 
-    Ort::Value& outputTensor = output.at(1);
+    Ort::Value& outputTensor = output.at(0);
     auto typeInfo = outputTensor.GetTensorTypeAndShapeInfo();
     auto shape = typeInfo.GetShape();
 
